@@ -57,6 +57,22 @@ merge (x:xs) (y:ys)
     | x < y = [x] ++ merge xs (y:ys)
     | otherwise = [y] ++ merge (x:xs) ys
 
+mergeSort :: (Ord a) => [a] -> [a]
+mergeSort [] = []
+mergeSort [x] = [x]
+mergeSort xs = merge (mergeSort left) (mergeSort right)
+    where
+        (left, right) = splitAt (length xs `div` 2) xs
+
+-- Lambda
+mySum :: (Num a) => [a] -> a
+-- mySum xs = foldl (\acc v -> acc + v) 0 xs
+mySum = foldl (+) 0
+
+sumSquares :: (Num a) => [a] -> a
+-- sumSquares xs = sum (map (^2) xs)
+sumSquares = sum . map (^2)
+
 main :: IO ()
 main = do
     let example = [1..4]
@@ -70,3 +86,9 @@ main = do
     print (quickSort [4, 3, 2, 1])
     print (quickSort2 [4, 3, 2, 1])
     print (merge [1, 3, 6] [2, 4, 5])
+    print (mergeSort [1, 3, 6, 2, 4, 5])
+    print (mySum [1, 2, 3])
+    print (sumSquares [1, 2, 3])
+
+    -- suim
+
