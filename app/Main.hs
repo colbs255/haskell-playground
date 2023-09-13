@@ -1,4 +1,4 @@
-module Main where
+import Sort
 
 listLength :: [a] -> Integer
 listLength []     = 0
@@ -32,37 +32,10 @@ myTake _ count
 myTake [] _ = []
 myTake (x:xs) count = x:(myTake xs (count-1))
 
-
 myZip :: [a] -> [b] -> [(a,b)]
 myZip [] _ = []
 myZip _ [] = []
 myZip (x:xs) (y:ys) = (x, y):myZip xs ys
-
-quickSort :: (Ord a) => [a] -> [a]
-quickSort [] = []
-quickSort (x:xs) =
-    let smallerSorted = quickSort [v | v <- xs, v <= x]
-        biggerSorted = quickSort [v | v <- xs, v > x]
-    in smallerSorted ++ [x] ++ biggerSorted
-
-quickSort2 :: (Ord a) => [a] -> [a]
-quickSort2 [] = []
-quickSort2 (x:xs) = quickSort2 (filter (<=x) xs) ++ [x] ++ quickSort2 (filter (>x) xs)
-
--- Merge sort
-merge :: (Ord a) => [a] -> [a] -> [a]
-merge [] x = x
-merge x [] = x
-merge (x:xs) (y:ys)
-    | x < y = [x] ++ merge xs (y:ys)
-    | otherwise = [y] ++ merge (x:xs) ys
-
-mergeSort :: (Ord a) => [a] -> [a]
-mergeSort [] = []
-mergeSort [x] = [x]
-mergeSort xs = merge (mergeSort left) (mergeSort right)
-    where
-        (left, right) = splitAt (length xs `div` 2) xs
 
 -- Lambda
 mySum :: (Num a) => [a] -> a
@@ -83,12 +56,8 @@ main = do
     print (myRepeat 'a' 5)
     print (myTake [1..5] 3)
     print (myZip [1..5] ['a', 'b', 'c', 'd', 'e'])
-    print (quickSort [4, 3, 2, 1])
-    print (quickSort2 [4, 3, 2, 1])
-    print (merge [1, 3, 6] [2, 4, 5])
-    print (mergeSort [1, 3, 6, 2, 4, 5])
+    print (Sort.quickSort [4, 3, 2, 1])
+    print (Sort.quickSort2 [4, 3, 2, 1])
+    print (Sort.mergeSort [1, 3, 6, 2, 4, 5])
     print (mySum [1, 2, 3])
     print (sumSquares [1, 2, 3])
-
-    -- suim
-
