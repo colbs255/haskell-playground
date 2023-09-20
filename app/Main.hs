@@ -1,63 +1,26 @@
-import Sort
+data Symbol = Constant Int | Function (Int -> Int -> Int)
 
-listLength :: [a] -> Integer
-listLength []     = 0
-listLength (_:xs) = 1 + listLength xs
-
-twoSum :: [Integer] -> Integer -> [(Integer, Integer)]
-twoSum a target = [(i,j) | i <- a, j <- a, i + j == target]
-
-max' :: (Ord a) => a -> a -> a
-max' a b
-    | a < b = b
-    | otherwise  = a
-
-maxInList :: (Ord a) => [a] -> a
-maxInList [] = error "list is empty"
-maxInList [x] = x
-maxInList (x:xs)
-    | x < rest = rest
-    | otherwise = x
-    where rest = maxInList xs
-
-myRepeat :: n -> Integer -> [n]
-myRepeat v count
-    | count <= 0 = []
-    | otherwise = v:(myRepeat v (count-1))
-
-myTake :: [a] -> Integer -> [a]
-myTake _ count
-    | count <= 0 = []
--- accounts for case in which count is greater than size of list
-myTake [] _ = []
-myTake (x:xs) count = x:(myTake xs (count-1))
-
-myZip :: [a] -> [b] -> [(a,b)]
-myZip [] _ = []
-myZip _ [] = []
-myZip (x:xs) (y:ys) = (x, y):myZip xs ys
-
--- Lambda
-mySum :: (Num a) => [a] -> a
--- mySum xs = foldl (\acc v -> acc + v) 0 xs
-mySum = foldl (+) 0
-
-sumSquares :: (Num a) => [a] -> a
--- sumSquares xs = sum (map (^2) xs)
-sumSquares = sum . map (^2)
+solveRPN :: String -> Float
+solveRPN = head . foldl eval [] . words
+    where
+        eval (b:a:rest) "+" = (a + b):rest
+        eval (b:a:rest) "-" = (a - b):rest
+        eval (b:a:rest) "*" = (a * b):rest
+        eval (b:a:rest) "/" = (a / b):rest
+        eval (b:a:rest) "^" = (a ** b):rest
+        eval (a:rest) "ln" = (log a):rest
+        eval rest num = (read num):rest
 
 main :: IO ()
 main = do
-    let example = [1..4]
-    print (listLength example)
-    print (twoSum example 5)
-    print (max 5 6)
-    print (maxInList [1..10])
-    print (myRepeat 'a' 5)
-    print (myTake [1..5] 3)
-    print (myZip [1..5] ['a', 'b', 'c', 'd', 'e'])
-    print (Sort.quickSort [4, 3, 2, 1])
-    print (Sort.quickSort2 [4, 3, 2, 1])
-    print (Sort.mergeSort [1, 3, 6, 2, 4, 5])
-    print (mySum [1, 2, 3])
-    print (sumSquares [1, 2, 3])
+    let x = [0..5]
+    let y = sum (filter (>3) (map (*2) x))
+    let y' = sum . filter (>3) . map (+3) . map (*2) $ x
+    let y'' = sum . filter (>3) . map ((+3) . (*2)) $ x
+    let message = "Hello, world!"
+    let result = length $ words $ reverse message
+    let result' = length . words . reverse $ message
+    let another = map (\x -> negate (abs x)) [5,-3,-6,7,-3,2,-19,24]
+    let another' = map (negate . abs) [5,-3,-6,7,-3,2,-19,24]
+    print result
+    print result'
